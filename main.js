@@ -1,1 +1,2 @@
-alert("hi")
+let phrase = 'bananna!';
+console.log(phrase);
