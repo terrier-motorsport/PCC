@@ -1,8 +1,25 @@
+//import Chart from 'chart.js/auto'
+
 const vtabs_chart = document.getElementById("voltage_tabs");
 const therms_chart = document.getElementById("thermistors");
 
+let elements = [vtabs_chart,therms_chart];
+
+function clear_page(){
+    for (i in elements){
+        elements[i].style.display = "none";
+    }
+}
+
+function show_elements(lis){
+    for (i in lis){
+        elements[lis[i]].style.display = "block";
+    }
+}
 
 function AMS_Page(){
+    //clear_page();
+    show_elements([0,1]);
     new Chart(vtabs_chart, {
       type: "pie",
       data: {
@@ -16,10 +33,10 @@ function AMS_Page(){
         ],
       },
     });
-    new Chart(therms_chart, {
-      type: "pie",
+    temp_chart = new Chart(therms_chart, {
+      type: "line",
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: [1,2,3,4,5,6],  
         datasets: [
           {
             label: "# of Votes",
@@ -28,5 +45,18 @@ function AMS_Page(){
           },
         ],
       },
+      options: {
+        backgroundColor:'rgba(44, 181, 32, 0.54)',
+        fill: true,
+        pointHoverRadius:10  
+      },
     });
+}
+
+function MC_Page(){
+    clear_page();
+}
+
+function COOLING_Page(){
+    clear_page();
 }

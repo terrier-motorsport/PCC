@@ -17,15 +17,19 @@
         <button type="button" class="button button1" onclick="AMS_Page()">
           AMS
         </button>
-        <button type="button" class="button button2">MOTOR CONTROLLER</button>
-        <button type="button" class="button button3">COOLING</button>
+        <button type="button" class="button button2" onclick="MC_Page()">
+          MOTOR CONTROLLER
+        </button>
+        <button type="button" class="button button3" onclick="COOLING_Page()">
+          COOLING
+        </button>
       </div>
     </div>
     <!--creates AMS related charts-->
     <div style="width: 500px" class="pose_vtabs">
       <canvas id="voltage_tabs"></canvas>
     </div>
-    <div style="width: 500px" class="pose_thermistors">
+    <div style="width: 700px" class="pose_thermistors">
       <canvas id="thermistors"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
