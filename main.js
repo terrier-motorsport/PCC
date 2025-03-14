@@ -6,6 +6,10 @@ const generic_data = {
         datasets: [{
             label: "# of Votes",
             data: [{x:1, y:1}, {x:3, y:5}, {x:5, y:13}]
+          },
+        {
+            label: "# of Votes",
+            data: [{x:1, y:1}, {x:3, y:5}, {x:5, y:13}]
           }]
       };
 let elements = [vtabs,therms];
@@ -45,11 +49,11 @@ function parse_data([time,values]){
   }
   return points;
 }
-function set_date_frame(l){
+function set_date_frame(r,l, offset = 0){
   let x = [],y = [];
   for(let i = counter, j = 0; i< counter+l;i++,j++){
-     x[j] = rows[i][0];
-     y[j] = rows[i][1];
+     x[j] = r[i][0];
+     y[j] = parseFloat(r[i][1])+offset;
   }
   counter +=1;
   return [x,y];
@@ -66,15 +70,22 @@ function AMS_Page(){
     //clear_page();
     show_elements([0,1]);
     loops[0] = true;
+    voltage_data = generic_data;
+    voltage_data["datasets"][0]["label"] = "Voltage Tap1";
+    voltage_data["datasets"][0]["data"] = parse_data(set_date_frame(rows,100));
+    voltage_data["datasets"][1]["label"] = "Voltage Tap2";
+    voltage_data["datasets"][1]["data"] = parse_data(set_date_frame(rows,100,1));
     volt_chart = new Chart(vtabs, {
         type: "line",
-        data: generic_data,
+        data: voltage_data,
         options: {
           scales: {
             x: {
               type:"linear"
             }
-          }
+          },
+          fill: true,
+          backgroundColor1: 'rgba(59, 59, 236, 0.54)'
         }
       }
     );
@@ -98,9 +109,10 @@ function AMS_Page(){
     });
     if (loops[0]){
       setInterval(() =>{
-        volt_chart.data.datasets[0].data = parse_data(set_date_frame(50));
+        volt_chart.data.datasets[0].data = parse_data(set_date_frame(rows,100));
+        volt_chart.data.datasets[1].data = parse_data(set_date_frame(rows,100,1));
 
-        volt_chart.update();
+        volt_chart.update("none");
       },50);
     }
 }
