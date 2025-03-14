@@ -1,14 +1,58 @@
 //import Chart from 'chart.js/auto'
+console.log("hi");  
+const vtabs = document.getElementById("voltage_tabs");
+const therms = document.getElementById("thermistors");
+const generic_data = {  
+        datasets: [{
+            label: "# of Votes",
+            data: [{x:1, y:1}, {x:3, y:5}, {x:5, y:13}]
+          }]
+      };
+let elements = [vtabs,therms];
+let loops = [false,false,false]
+let volt_chart;
+let temp_chart;
+let counter =2;
+let rows;
+fetch('sin_of_x.csv')
+  .then(response => response.text()) // Read the file as text
+  .then(csv => {
+    console.log("Raw CSV Data:");
+    //console.log(csv); // Logs the raw CSV data as a string
 
-const vtabs_chart = document.getElementById("voltage_tabs");
-const therms_chart = document.getElementById("thermistors");
+    // Convert CSV string to an array of rows
+    rows = csv.split("\n").map(row => row.split(","));
 
-let elements = [vtabs_chart,therms_chart];
+    console.log("Parsed Data (Array of Arrays):");
+    console.log(rows);
+  })
+  .catch(error => console.error('Error loading the CSV file:', error));
 
 function clear_page(){
     for (i in elements){
         elements[i].style.display = "none";
     }
+    for (i in loops){
+      loops[i] = false;
+    }
+}
+function parse_data([time,values]){
+  var points = [];
+  for (let i = 0; i< time.length; i++){
+    var x;
+    var y;
+    points[i] = {x: time.at(i),y: values.at(i)};
+  }
+  return points;
+}
+function set_date_frame(l){
+  let x = [],y = [];
+  for(let i = counter, j = 0; i< counter+l;i++,j++){
+     x[j] = rows[i][0];
+     y[j] = rows[i][1];
+  }
+  counter +=1;
+  return [x,y];
 }
 
 function show_elements(lis){
@@ -16,24 +60,25 @@ function show_elements(lis){
         elements[lis[i]].style.display = "block";
     }
 }
-
+console.log("sample data set");
+console.log(set_date_frame(10));
 function AMS_Page(){
     //clear_page();
     show_elements([0,1]);
-    new Chart(vtabs_chart, {
-      type: "pie",
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-          },
-        ],
-      },
-    });
-    temp_chart = new Chart(therms_chart, {
+    loops[0] = true;
+    volt_chart = new Chart(vtabs, {
+        type: "line",
+        data: generic_data,
+        options: {
+          scales: {
+            x: {
+              type:"linear"
+            }
+          }
+        }
+      }
+    );
+    temp_chart = new Chart(therms, {
       type: "line",
       data: {
         labels: [1,2,3,4,5,6],  
@@ -51,6 +96,13 @@ function AMS_Page(){
         pointHoverRadius:10  
       },
     });
+    if (loops[0]){
+      setInterval(() =>{
+        volt_chart.data.datasets[0].data = parse_data(set_date_frame(50));
+
+        volt_chart.update();
+      },50);
+    }
 }
 
 function MC_Page(){
