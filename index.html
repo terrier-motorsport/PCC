@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pit Control Center.... hopefully</title>
+    <link href="./resources/css/index.css" type="text/css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <h1>Please Select System to view!</h1>
+    `
+    <!--Creates drop down menu-->
+    <div class="dropdown">
+      <button class="dropbtn">Dropdown</button>
+      <div class="dropdown-content">
+        <button type="button" class="button button1" onclick="AMS_Page()">
+          AMS
+        </button>
+        <button type="button" class="button button2" onclick="MC_Page()">
+          MOTOR CONTROLLER
+        </button>
+        <button type="button" class="button button3" onclick="COOLING_Page()">
+          COOLING
+        </button>
+      </div>
+    </div>
+    <!--creates AMS related charts-->
+    <div style="width: 500px" class="pose_vtabs">
+      <canvas id="voltage_tabs"></canvas>
+    </div>
+    <div style="width: 700px" class="pose_thermistors">
+      <canvas id="thermistors"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--Loads JavaScript-->
+    <script src="main.js"></script>
+  </body>
+</html>
